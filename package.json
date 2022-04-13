@@ -1,0 +1,17 @@
+{
+    "name": "delete-test-01",
+    "description": "delete-test-01-description",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "googleapis": "^100.0.0",
+        "jsonwebtoken": "^8.5.1"
+    },
+    "devDependencies": {
+        "jest": "^26.6.3"
+    },
+    "scripts": {
+        "test": "jest",
+        "dev": "sam local start-api --warm-containers EAGER"
+    }
+}

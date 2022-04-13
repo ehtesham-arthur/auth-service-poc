@@ -1,0 +1,98 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  arthur-auth-service
+
+Transform:
+- AWS::Serverless-2016-10-31
+
+Resources:
+  loginSSO:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/functions/login-sso/index.handler
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: Endpoint when login with sso is called
+      Environment:
+        Variables:
+          GoogleClientId: 628334755553-6fqao8h6co8vl5siembb7fcib4efj358.apps.googleusercontent.com
+          GoogleClientSecret: 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
+          FrontEndRedirectUrl: https://google.com
+          JWTSecret: SUPERSECRET
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /auth/sso
+            Method: POST
+  verifySSO:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/functions/verify-sso/index.handler
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: Endpoint when verify with sso is called
+      Environment:
+        Variables:
+          GoogleClientId: 628334755553-6fqao8h6co8vl5siembb7fcib4efj358.apps.googleusercontent.com
+          GoogleClientSecret: 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
+          FrontEndRedirectUrl: https://google.com
+          JWTSecret: SUPERSECRET
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /auth/sso/verify
+            Method: POST
+  profile:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/functions/profile/index.handler
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: Endpoint when verify with sso is called
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /me
+            Method: GET
+  customAuthorizer:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/functions/authorizer/index.handler
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: Endpoint when verify with sso is called
+  MyApi:
+      Type: AWS::Serverless::Api
+      Properties:
+        StageName: dev
+        Auth:
+          DefaultAuthorizer: JWTCustomAuthorizer
+          Authorizers:
+            JWTCustomAuthorizer:
+              FunctionArn: !GetAtt customAuthorizer.Arn
+              FunctionPayloadType: TOKEN
+              Identity:
+                Headers:
+                  - Authorization
+                ReauthorizeEvery: 300
+Outputs:
+  WebEndpoint:
+    Description: "API Gateway endpoint URL for Prod stage"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+
+
