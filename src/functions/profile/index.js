@@ -6,8 +6,8 @@ exports.handler = async (event) => {
     console.info('received:', event);
 
     const response = {
-      statusCode: 400,
-      body: JSON.stringify({ email: 'test@gmail.com' })
+      statusCode: 200,
+      body: JSON.stringify({ authResult: event.requestContext.authorizer })
     };
     console.info(`response from: ${event.path} statusCode: ${response.statusCode} body: ${response.body}`);
     return response;

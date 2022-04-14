@@ -34,7 +34,7 @@ exports.handler = async (event) => {
     const {authUrl, callbackUrl } = authService.getAuthSettings();
 
     const response = {
-      statusCode: 400,
+      statusCode: 200,
       body: JSON.stringify({ authUrl: authUrl, callbackUrl: callbackUrl, ssoType: organizationData.sso.type })
     };
     console.info(`response from: ${event.path} statusCode: ${response.statusCode} body: ${response.body}`);

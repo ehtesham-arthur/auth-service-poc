@@ -1,0 +1,12 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "arthur-auth-poc"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-lzr6b50jgwbd"
+s3_prefix = "arthur-auth-poc"
+region = "us-east-1"
+profile = "arthur"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+image_repositories = []

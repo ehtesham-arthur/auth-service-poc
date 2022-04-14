@@ -1,20 +1,15 @@
+const { AuthService } = require("../../services/jwt-auth.service");
+
 /**
- * A simple example to check email if it exists in our environment then return auth and callback url
+ * A custom authorizer for api gateway
  */
-exports.handler = async (event) => {
+exports.handler = async (event, _context, callback) => {
   try {
     console.info('received:', event);
-    const response = {
-        statusCode: 400,
-        body: JSON.stringify({ error: true })
-      };
-    return response;
+    const authService = new AuthService();
+    return authService.authenticate(event);
   } catch (error) {
-    const response = {
-      statusCode: 400,
-      body: JSON.stringify({ error: error.message })
-    };
-    return response;
+    console.log('error occurred is ', err);
+    callback('Unauthorized'); // Return a 401 Unauthorized response
   }
-
 }
